@@ -1060,17 +1060,18 @@ function loadTableData(tableName, bodyEl) {
   })
     .then((result) => {
       bodyEl.innerHTML = "";
-      if (!result || !result.success || !result.rows || result.rows.length === 0) {
+      const rows = (result && (result.data || result.rows)) || [];
+      if (!result || !result.success || rows.length === 0) {
         bodyEl.innerHTML = '<div class="db-modal-spinner">No records stored in table "' + esc(tableName) + '".</div>';
         return;
       }
       const info = makeEl("div", "db-table-info");
       const titleSpan = makeEl("span", null);
       titleSpan.innerHTML = "Table: <b>" + esc(tableName) + "</b>";
-      const countSpan = makeEl("span", null, result.row_count + " row(s)" + (result.truncated ? " (showing first 250)" : ""));
+      const countSpan = makeEl("span", null, (result.row_count || rows.length) + " row(s)" + (result.truncated ? " (showing first 250)" : ""));
       info.append(titleSpan, countSpan);
 
-      const tableWrap = buildTable(result.columns || [], result.rows || [], result.row_count || 0);
+      const tableWrap = buildTable(result.columns || [], rows, result.row_count || rows.length);
       bodyEl.append(info, tableWrap);
     })
     .catch((err) => {

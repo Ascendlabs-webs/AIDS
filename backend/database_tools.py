@@ -146,6 +146,7 @@ def execute_query(sql, db="grocery"):
             "truncated": truncated,
             "columns": columns,
             "data": data,
+            "rows": data,
         }
 
     except Exception as error:  # noqa: BLE001 - surface errors to the model
