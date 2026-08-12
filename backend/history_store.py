@@ -6,28 +6,50 @@ needed; every mutation is written through immediately.
 """
 import json
 import os
+import tempfile
 import time
 import uuid
 
-HISTORY_FILE = os.path.join(
+_LOCAL_HISTORY_FILE = os.path.join(
     os.path.dirname(__file__), "data", "history.json"
 )
 
+# Serverless environments (e.g. Vercel) have a read-only bundle, so fall
+# back to the writable temp directory when the local data dir is not writable.
+HISTORY_FILE = _LOCAL_HISTORY_FILE
+
+
+def _resolve_history_file():
+    global HISTORY_FILE
+    if HISTORY_FILE != _LOCAL_HISTORY_FILE:
+        return HISTORY_FILE
+    try:
+        os.makedirs(os.path.dirname(HISTORY_FILE), exist_ok=True)
+        probe = os.path.join(os.path.dirname(HISTORY_FILE), ".write-test")
+        with open(probe, "w", encoding="utf-8"):
+            pass
+        os.remove(probe)
+    except OSError:
+        HISTORY_FILE = os.path.join(tempfile.gettempdir(), "daa_history.json")
+    return HISTORY_FILE
+
 
 def _load():
-    os.makedirs(os.path.dirname(HISTORY_FILE), exist_ok=True)
-    if not os.path.exists(HISTORY_FILE):
+    history_file = _resolve_history_file()
+    os.makedirs(os.path.dirname(history_file), exist_ok=True)
+    if not os.path.exists(history_file):
         return []
     try:
-        with open(HISTORY_FILE, "r", encoding="utf-8") as file:
+        with open(history_file, "r", encoding="utf-8") as file:
             return json.load(file)
     except (json.JSONDecodeError, OSError):
         return []
 
 
 def _save(entries):
-    os.makedirs(os.path.dirname(HISTORY_FILE), exist_ok=True)
-    with open(HISTORY_FILE, "w", encoding="utf-8") as file:
+    history_file = _resolve_history_file()
+    os.makedirs(os.path.dirname(history_file), exist_ok=True)
+    with open(history_file, "w", encoding="utf-8") as file:
         json.dump(entries, file, indent=2)
 
 
