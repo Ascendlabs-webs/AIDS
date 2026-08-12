@@ -74,12 +74,15 @@
           <h1>Data Agent</h1>
           <p class="welcome-sub">Ask questions about your data. Explore your database using natural language — get SQL, charts and diagrams generated live.</p>
           <p id="welcome-note" class="welcome-note" hidden></p>
-          <div class="chips">
-            <button class="chip" data-prompt="Top 5 products by revenue — show a bar chart">Top 5 products by revenue — show a bar chart</button>
-            <button class="chip" data-prompt="Trend of monthly revenue over time">Trend of monthly revenue over time</button>
-            <button class="chip" data-prompt="Draw me the ER diagram for this database">Draw me the ER diagram for this database</button>
-            <button class="chip" data-prompt="Create a flowchart showing how orders flow through our system">Create a flowchart showing how orders flow through our system</button>
-          </div>
+           <div class="chips">
+             <button class="chip" data-prompt="Top 5 products by revenue — show a bar chart">Top 5 products by revenue — show a bar chart</button>
+             <button class="chip" data-prompt="Trend of monthly revenue over time">Trend of monthly revenue over time</button>
+             <button class="chip" data-prompt="Draw me the ER diagram for this database">Draw me the ER diagram for this database</button>
+             <button class="chip" data-prompt="Create a flowchart showing how orders flow through our system">Create a flowchart showing how orders flow through our system</button>
+           </div>
+           <div class="welcome-action">
+             <button id="show-tables-btn" class="btn secondary-btn">Show Tables</button>
+           </div>
         </div>
       </section>
       <div id="input-bar">
@@ -95,6 +98,17 @@
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-  <script src="static/app.js?v=19"></script>
+   <script src="static/app.js?v=19"></script>
+   <div id="table-modal" class="modal" hidden>
+     <div class="modal-content">
+       <div class="modal-header">
+         <h2>Database Tables</h2>
+         <button id="table-modal-close" class="modal-close-btn" aria-label="Close">��✕</button>
+       </div>
+       <div id="table-modal-body" class="modal-body">
+         <!-- Table list will be inserted here -->
+       </div>
+     </div>
+   </div>
 </body>
 </html>
