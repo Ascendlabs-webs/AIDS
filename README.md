@@ -4,6 +4,10 @@
 
 An LLM-powered agent that lets non-technical users ask questions in plain English, query a SQLite database, and see the answers with interactive charts, diagrams and tables — all inside a ChatGPT-style chat interface. No SQL knowledge required.
 
+## 🌐 Live Demo → [aids-nine.vercel.app](https://aids-nine.vercel.app/)
+
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-aids--nine.vercel.app-7c6cf0?style=for-the-badge&logo=vercel&logoColor=white)](https://aids-nine.vercel.app/)
+
 ![Python](https://img.shields.io/badge/Python-3.10+-3776ab?style=flat-square&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=flat-square&logo=fastapi&logoColor=white)
 ![Gemini](https://img.shields.io/badge/Google%20Gemini-AI-7c6cf0?style=flat-square&logo=google&logoColor=white)
@@ -318,6 +322,8 @@ The test suite covers schema discovery, SQL execution safety (non-SELECT rejecti
 4. Deploy — Vercel automatically detects `vercel.json` and builds from `api/index.py`
 
 The `vercel.json` includes `includeFiles` directives that bundle `frontend/`, `database/` and `backend/` into the serverless function.
+
+**Live deployment:** https://aids-nine.vercel.app/
 
 ---
 
