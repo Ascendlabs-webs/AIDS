@@ -1094,6 +1094,7 @@ function openDatabaseExplorer() {
   tabsEl.innerHTML = "";
   bodyEl.innerHTML = '<div class="db-modal-spinner">Discovering stored tables…</div>';
   modal.hidden = false;
+  modal.style.display = "flex";
 
   api("/api/schema?database=" + encodeURIComponent(state.database))
     .then((schema) => {
@@ -1128,20 +1129,24 @@ function openDatabaseExplorer() {
     });
 }
 
+function closeDbModal() {
+  const modal = document.getElementById("db-modal");
+  if (modal) {
+    modal.hidden = true;
+    modal.style.display = "none";
+  }
+}
+
 const showTablesBtn = document.getElementById("show-tables-btn");
 if (showTablesBtn) {
   showTablesBtn.addEventListener("click", openDatabaseExplorer);
 }
 
-const dbModalCloseBtn = document.getElementById("table-modal-close");
-if (dbModalCloseBtn) {
-  dbModalCloseBtn.addEventListener("click", closeDbModal);
-}
-
-const dbModalBackdrop = document.getElementById("db-modal-backdrop");
-if (dbModalBackdrop) {
-  dbModalBackdrop.addEventListener("click", closeDbModal);
-}
+document.addEventListener("click", (e) => {
+  if (e.target.closest("#table-modal-close") || e.target.id === "db-modal-backdrop") {
+    closeDbModal();
+  }
+});
 
 window.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
