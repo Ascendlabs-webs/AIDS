@@ -12,7 +12,6 @@ An LLM-powered agent that lets non-technical users ask questions in plain Englis
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=flat-square&logo=fastapi&logoColor=white)
 ![Gemini](https://img.shields.io/badge/Google%20Gemini-AI-7c6cf0?style=flat-square&logo=google&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=flat-square&logo=vercel&logoColor=white)
-![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 
 ---
 
@@ -368,9 +367,3 @@ The database selector in the UI updates automatically. The agent discovers the s
 | Frontend | Vanilla HTML/CSS/JS, Marked.js (markdown) |
 | Deployment | Vercel Serverless (`@vercel/python`) |
 | Testing | pytest |
-
----
-
-## License
-
-MIT — free to use, modify and distribute.
