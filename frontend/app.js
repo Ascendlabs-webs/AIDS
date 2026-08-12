@@ -836,67 +836,13 @@ function sendMessage(text) {
           };
           const bodies = $$(".sql-card", aEl.artifactsEl);
           bodies.forEach((b) => {
-            if (!$( ".query-result", b)) {
+            if (!$(".query-result", b)) {
               const art = assistant.artifacts.find((a) => a.kind === "sql");
               if (art && art.result) {
                 $(".sql-body", b).append(renderQueryResult(art.result));
                 b.classList.add("open");
-}
-function showTables() {
-  const btn = document.getElementById('show-tables-btn');
-  if (!btn) return;
-  btn.disabled = true;
-  btn.textContent = 'Loading…';
-  const sql = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
-  api("/api/query", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ sql: sql })
-  })
-    .then((result) => {
-      // result should be { columns: [...], rows: [...] }
-      const tbody = document.getElementById('table-modal-body');
-      tbody.innerHTML = '';
-      if (!result || !result.rows || result.rows.length === 0) {
-        tbody.innerHTML = '<p>No tables found.</p>';
-      } else {
-        const table = document.createElement('table');
-        const thead = document.createElement('thead');
-        thead.innerHTML = '<tr><th>Table Name</th></tr>';
-        table.appendChild(thead);
-        const tbodyEl = document.createElement('tbody');
-        result.rows.forEach((row) => {
-          const tr = document.createElement('tr');
-          const td = document.createElement('td');
-          td.textContent = row[0]; // assuming first column is table name
-          tr.appendChild(td);
-          tbodyEl.appendChild(tr);
-        });
-        table.appendChild(tbodyEl);
-        tbody.appendChild(table);
-      }
-      // Show modal
-      const modal = document.getElementById('table-modal');
-      if (modal) {
-        modal.hidden = false;
-      }
-    })
-    .catch((err) => {
-      alert('Failed to load tables: ' + (err.message || err));
-    })
-    .finally(() => {
-      btn.disabled = false;
-      btn.textContent = 'Show Tables';
-    });
-}
-
-    // Show tables button listener
-    const showTablesBtn = document.getElementById('show-tables-btn');
-    if (showTablesBtn) {
-      showTablesBtn.addEventListener('click', showTables);
-    }
-   }
-
+              }
+            }
           });
         } else {
           const artifact = {
@@ -1089,6 +1035,61 @@ function autosizeInput() {
 
 function sendFromInput() {
   sendMessage(els.input.value);
+}
+
+/* ------------------------------------------------------------------ */
+/* table modal                                                         */
+/* ------------------------------------------------------------------ */
+
+function showTables() {
+  const btn = document.getElementById('show-tables-btn');
+  if (!btn) return;
+  btn.disabled = true;
+  btn.textContent = 'Loading…';
+  const sql = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
+  api("/api/query", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ sql: sql })
+  })
+    .then((result) => {
+      const tbody = document.getElementById('table-modal-body');
+      tbody.innerHTML = '';
+      if (!result || !result.rows || result.rows.length === 0) {
+        tbody.innerHTML = '<p>No tables found.</p>';
+      } else {
+        const table = document.createElement('table');
+        const thead = document.createElement('thead');
+        thead.innerHTML = '<tr><th>Table Name</th></tr>';
+        table.appendChild(thead);
+        const tbodyEl = document.createElement('tbody');
+        result.rows.forEach((row) => {
+          const tr = document.createElement('tr');
+          const td = document.createElement('td');
+          td.textContent = row[0];
+          tr.appendChild(td);
+          tbodyEl.appendChild(tr);
+        });
+        table.appendChild(tbodyEl);
+        tbody.appendChild(table);
+      }
+      const modal = document.getElementById('table-modal');
+      if (modal) {
+        modal.hidden = false;
+      }
+    })
+    .catch((err) => {
+      alert('Failed to load tables: ' + (err.message || err));
+    })
+    .finally(() => {
+      btn.disabled = false;
+      btn.textContent = 'Show Tables';
+    });
+}
+
+const showTablesBtn = document.getElementById('show-tables-btn');
+if (showTablesBtn) {
+  showTablesBtn.addEventListener('click', showTables);
 }
 
 /* ------------------------------------------------------------------ */

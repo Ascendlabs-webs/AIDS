@@ -1,8 +1,10 @@
 import json
+import os
 import sys
-sys.path.insert(0, ".")
 
-from agent import stream_chat
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from backend.agent import stream_chat
 
 question = sys.argv[1] if len(sys.argv) > 1 else "List the top 5 products by revenue and show a bar chart"
 print("QUESTION:", question)

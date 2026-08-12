@@ -2,6 +2,8 @@
 setlocal enabledelayedexpansion
 cd /d "%~dp0backend"
 
+set PYTHONPATH=%~dp0;%PYTHONPATH%
+
 echo.
 echo ==============================================
 echo   Data AI Agent - one-click launcher (Windows)

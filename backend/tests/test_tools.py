@@ -1,10 +1,10 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
-from diagram_tools import generate_diagram
-from explanation_tools import explain_data
+from backend.diagram_tools import generate_diagram
+from backend.explanation_tools import explain_data
 
 
 class TestDiagrams:

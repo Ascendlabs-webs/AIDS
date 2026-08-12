@@ -1,4 +1,4 @@
-﻿google-genai<3.0.0
+google-genai<3.0.0
 fastapi
 uvicorn
 plotly
@@ -6,4 +6,3 @@ numpy
 pandas
 python-dotenv
 python-multipart
-pytest

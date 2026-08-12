@@ -6,11 +6,11 @@ docstring so the Gemini SDK can build function declarations from them.
 """
 import json
 
-from database_tools import execute_query as _execute_query
-from database_tools import generate_chart as _generate_chart
-from database_tools import get_schema as _get_schema
-from diagram_tools import generate_diagram
-from explanation_tools import explain_data as _explain_data
+from backend.database_tools import execute_query as _execute_query
+from backend.database_tools import generate_chart as _generate_chart
+from backend.database_tools import get_schema as _get_schema
+from backend.diagram_tools import generate_diagram
+from backend.explanation_tools import explain_data as _explain_data
 
 
 # ==================================================================

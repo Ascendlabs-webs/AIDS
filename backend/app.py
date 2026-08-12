@@ -13,10 +13,10 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from agent import stream_chat
-from config import DATABASES, database_names
-from database_tools import execute_query, get_schema
-from history_store import (
+from backend.agent import stream_chat
+from backend.config import DATABASES, database_names
+from backend.database_tools import execute_query, get_schema
+from backend.history_store import (
     add_entry,
     delete_entry,
     list_entries,

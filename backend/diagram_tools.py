@@ -83,8 +83,11 @@ def generate_diagram(diagram_type, title, content):
     filepath = os.path.join(
         DIAGRAM_FOLDER, f"{safe_name}_{diagram_type}.mmd"
     )
-    with open(filepath, "w", encoding="utf-8") as file:
-        file.write(content)
+    try:
+        with open(filepath, "w", encoding="utf-8") as file:
+            file.write(content)
+    except OSError:
+        filepath = None
 
     return {
         "success": True,

@@ -23,8 +23,8 @@ from google import genai
 from google.genai import errors
 from google.genai import types
 
-from config import DATABASES, GEMINI_API_KEY, GEMINI_MODEL, MAX_TOOL_TURNS
-from tool_registry import build_tool_declarations, run_tool
+from backend.config import DATABASES, GEMINI_API_KEY, GEMINI_MODEL, MAX_TOOL_TURNS
+from backend.tool_registry import build_tool_declarations, run_tool
 
 load_dotenv()
 

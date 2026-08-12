@@ -10,7 +10,7 @@ import sqlite3
 
 import plotly.express as px
 
-from config import DATABASES, MAX_QUERY_ROWS
+from backend.config import DATABASES, MAX_QUERY_ROWS
 
 # ------------------------------------------------------------------
 # Output folders for generated charts / diagrams
@@ -225,7 +225,10 @@ def generate_chart(
         )
 
         filepath = os.path.join(CHART_FOLDER, f"chart_{chart_type}.html")
-        figure.write_html(filepath)
+        try:
+            figure.write_html(filepath)
+        except OSError:
+            filepath = None
 
         return {
             "success": True,

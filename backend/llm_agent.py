@@ -3,15 +3,15 @@ import json
 from dotenv import load_dotenv
 from google import genai
 
-from database_tools import (
+from backend.database_tools import (
     get_schema,
     execute_query,
     generate_chart
 )
 
-from diagram_tools import generate_flowchart
+from backend.diagram_tools import generate_flowchart
 
-from explanation_tools import explain_data
+from backend.explanation_tools import explain_data
 
 
 # Load environment variables

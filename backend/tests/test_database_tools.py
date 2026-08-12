@@ -2,11 +2,11 @@ import json
 import os
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
 
 import pytest
 
-from database_tools import execute_query, generate_chart, get_schema
+from backend.database_tools import execute_query, generate_chart, get_schema
 
 
 @pytest.fixture(scope="module")

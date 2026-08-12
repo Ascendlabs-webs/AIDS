@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 # Data AI Agent - one-click launcher (macOS / Linux)
 set -e
-cd "$(dirname "$0")/backend"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$SCRIPT_DIR/backend"
+
+export PYTHONPATH="$SCRIPT_DIR:$PYTHONPATH"
 
 echo
 echo "=============================================="
