@@ -7,7 +7,10 @@ client-side with the mermaid.js library and we keep a copy on disk.
 import os
 
 DIAGRAM_FOLDER = os.path.join(os.path.dirname(__file__), "diagrams")
-os.makedirs(DIAGRAM_FOLDER, exist_ok=True)
+try:
+    os.makedirs(DIAGRAM_FOLDER, exist_ok=True)
+except OSError:
+    DIAGRAM_FOLDER = os.path.join(os.path.dirname(__file__), "..", "..", "tmp", "diagrams")
 
 SUPPORTED_TYPES = ("er", "flowchart", "mindmap", "graph")
 

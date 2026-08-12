@@ -17,7 +17,10 @@ from backend.config import DATABASES, MAX_QUERY_ROWS
 # ------------------------------------------------------------------
 
 CHART_FOLDER = os.path.join(os.path.dirname(__file__), "charts")
-os.makedirs(CHART_FOLDER, exist_ok=True)
+try:
+    os.makedirs(CHART_FOLDER, exist_ok=True)
+except OSError:
+    CHART_FOLDER = os.path.join(os.path.dirname(__file__), "..", "..", "tmp", "charts")
 
 
 def _connect(db):

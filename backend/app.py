@@ -9,7 +9,7 @@ from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -142,14 +142,27 @@ def remove_history(entry_id: str):
 
 @app.get("/")
 def index():
-    return FileResponse(FRONTEND_DIR / "index.html")
+    index_path = FRONTEND_DIR / "index.html"
+    if not index_path.exists():
+        return JSONResponse(
+            {"error": "Frontend not found. This deployment may be API-only."},
+            status_code=404,
+        )
+    return FileResponse(index_path)
 
 
-app.mount(
-    "/static",
-    StaticFiles(directory=str(FRONTEND_DIR)),
-    name="static",
-)
+# Mount static files only if the frontend directory exists.
+# On Vercel the bundle includes the frontend/ directory; guard against
+# misconfigured builds where the path does not resolve correctly.
+try:
+    if FRONTEND_DIR.exists():
+        app.mount(
+            "/static",
+            StaticFiles(directory=str(FRONTEND_DIR)),
+            name="static",
+        )
+except Exception:  # noqa: BLE001 – non-fatal; API still works
+    pass
 
 
 if __name__ == "__main__":
