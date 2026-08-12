@@ -1041,56 +1041,112 @@ function sendFromInput() {
 /* table modal                                                         */
 /* ------------------------------------------------------------------ */
 
-function showTables() {
-  const btn = document.getElementById('show-tables-btn');
-  if (!btn) return;
-  btn.disabled = true;
-  btn.textContent = 'Loading…';
-  const sql = "SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
+/* ------------------------------------------------------------------ */
+/* database explorer modal                                             */
+/* ------------------------------------------------------------------ */
+
+function closeDbModal() {
+  const modal = document.getElementById("db-modal");
+  if (modal) modal.hidden = true;
+}
+
+function loadTableData(tableName, bodyEl) {
+  bodyEl.innerHTML = '<div class="db-modal-spinner">Loading stored records for ' + esc(tableName) + '…</div>';
+  const sql = 'SELECT * FROM "' + tableName + '" LIMIT 250;';
   api("/api/query", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ sql: sql })
+    body: JSON.stringify({ sql: sql, database: state.database }),
   })
     .then((result) => {
-      const tbody = document.getElementById('table-modal-body');
-      tbody.innerHTML = '';
-      if (!result || !result.rows || result.rows.length === 0) {
-        tbody.innerHTML = '<p>No tables found.</p>';
-      } else {
-        const table = document.createElement('table');
-        const thead = document.createElement('thead');
-        thead.innerHTML = '<tr><th>Table Name</th></tr>';
-        table.appendChild(thead);
-        const tbodyEl = document.createElement('tbody');
-        result.rows.forEach((row) => {
-          const tr = document.createElement('tr');
-          const td = document.createElement('td');
-          td.textContent = row[0];
-          tr.appendChild(td);
-          tbodyEl.appendChild(tr);
-        });
-        table.appendChild(tbodyEl);
-        tbody.appendChild(table);
+      bodyEl.innerHTML = "";
+      if (!result || !result.success || !result.rows || result.rows.length === 0) {
+        bodyEl.innerHTML = '<div class="db-modal-spinner">No records stored in table "' + esc(tableName) + '".</div>';
+        return;
       }
-      const modal = document.getElementById('table-modal');
-      if (modal) {
-        modal.hidden = false;
-      }
+      const info = makeEl("div", "db-table-info");
+      const titleSpan = makeEl("span", null);
+      titleSpan.innerHTML = "Table: <b>" + esc(tableName) + "</b>";
+      const countSpan = makeEl("span", null, result.row_count + " row(s)" + (result.truncated ? " (showing first 250)" : ""));
+      info.append(titleSpan, countSpan);
+
+      const tableWrap = buildTable(result.columns || [], result.rows || [], result.row_count || 0);
+      bodyEl.append(info, tableWrap);
     })
     .catch((err) => {
-      alert('Failed to load tables: ' + (err.message || err));
-    })
-    .finally(() => {
-      btn.disabled = false;
-      btn.textContent = 'Show Tables';
+      bodyEl.innerHTML = '<div class="db-modal-spinner">Failed to load table data: ' + esc(err.message || err) + '</div>';
     });
 }
 
-const showTablesBtn = document.getElementById('show-tables-btn');
-if (showTablesBtn) {
-  showTablesBtn.addEventListener('click', showTables);
+function openDatabaseExplorer() {
+  const modal = document.getElementById("db-modal");
+  const tabsEl = document.getElementById("db-modal-tabs");
+  const bodyEl = document.getElementById("table-modal-body");
+  const titleEl = document.getElementById("db-modal-title");
+
+  if (!modal || !tabsEl || !bodyEl) return;
+
+  if (titleEl) {
+    titleEl.textContent = (state.database || "Grocery").toUpperCase() + " DATABASE";
+  }
+
+  tabsEl.innerHTML = "";
+  bodyEl.innerHTML = '<div class="db-modal-spinner">Discovering stored tables…</div>';
+  modal.hidden = false;
+
+  api("/api/schema?database=" + encodeURIComponent(state.database))
+    .then((schema) => {
+      tabsEl.innerHTML = "";
+      const tables = Object.keys(schema).sort();
+      if (!tables.length) {
+        bodyEl.innerHTML = '<div class="db-modal-spinner">No tables found in this database.</div>';
+        return;
+      }
+
+      tables.forEach((tableName, idx) => {
+        const info = schema[tableName];
+        const btn = makeEl("button", "db-tab-btn" + (idx === 0 ? " active" : ""));
+        const nameSpan = makeEl("span", null, tableName);
+        const countSpan = makeEl("span", "db-tab-count", info.row_count + "");
+        btn.append(nameSpan, countSpan);
+
+        btn.addEventListener("click", () => {
+          $$(".db-tab-btn", tabsEl).forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          loadTableData(tableName, bodyEl);
+        });
+
+        tabsEl.append(btn);
+      });
+
+      // Load first table data by default
+      loadTableData(tables[0], bodyEl);
+    })
+    .catch((err) => {
+      bodyEl.innerHTML = '<div class="db-modal-spinner">Failed to load schema: ' + esc(err.message || err) + '</div>';
+    });
 }
+
+const showTablesBtn = document.getElementById("show-tables-btn");
+if (showTablesBtn) {
+  showTablesBtn.addEventListener("click", openDatabaseExplorer);
+}
+
+const dbModalCloseBtn = document.getElementById("table-modal-close");
+if (dbModalCloseBtn) {
+  dbModalCloseBtn.addEventListener("click", closeDbModal);
+}
+
+const dbModalBackdrop = document.getElementById("db-modal-backdrop");
+if (dbModalBackdrop) {
+  dbModalBackdrop.addEventListener("click", closeDbModal);
+}
+
+window.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    closeDbModal();
+  }
+});
 
 /* ------------------------------------------------------------------ */
 /* init & events                                                       */
