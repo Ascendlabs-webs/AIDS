@@ -1,0 +1,14 @@
+[project]
+name = "data-agent"
+version = "1.0.0"
+requires-python = ">=3.12"
+dependencies = [
+    "google-genai<3.0.0",
+    "fastapi",
+    "uvicorn",
+    "plotly",
+    "numpy",
+    "pandas",
+    "python-dotenv",
+    "python-multipart",
+]
