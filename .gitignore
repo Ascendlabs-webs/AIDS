@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+*.pyc
+.env
+backend/charts/
+backend/diagrams/
+backend/data/
+node_modules/
+.DS_Store
+*.zip
+backend/explanation

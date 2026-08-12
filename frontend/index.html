@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data AI Agent</title>
+  <link rel="icon" href="static/logo.png">
+  <link rel="stylesheet" href="static/style.css?v=19">
+</head>
+<body>
+  <div id="app">
+    <aside id="sidebar">
+      <div class="sidebar-head">
+        <div class="brand">
+          <span class="brand-logo"><img src="static/logo-icon.png" alt="Data Agent logo"></span>
+          <span>Data Agent</span>
+          <span class="brand-badge">Enterprise</span>
+        </div>
+        <label class="db-label" for="db-select">Database</label>
+        <select id="db-select" title="Select database"></select>
+        <button id="new-chat-btn" class="btn primary-btn" title="Start a new chat and save the current one">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          New chat
+        </button>
+      </div>
+      <div class="sidebar-scroll">
+        <section class="side-section">
+          <h3>Chat sessions</h3>
+          <ul id="session-list" class="side-list"></ul>
+        </section>
+        <section class="side-section">
+          <h3>Query history</h3>
+          <ul id="history-list" class="side-list"></ul>
+        </section>
+        <section class="side-section">
+          <h3>Pinned dashboard</h3>
+          <div id="pinned-list" class="pinned-list"></div>
+        </section>
+        <section class="side-section">
+          <button id="schema-toggle" class="btn ghost-btn" title="Show the database schema">View schema</button>
+          <div id="schema-panel" class="schema-panel" hidden></div>
+        </section>
+      </div>
+    </aside>
+    <main id="main">
+      <header id="topbar">
+        <button id="sidebar-toggle" class="icon-btn" title="Toggle sidebar" aria-label="Toggle sidebar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <span id="topbar-title">Data Agent</span>
+        <span id="topbar-db" class="topbar-db"></span>
+      </header>
+      <div id="error-banner" class="error-banner" hidden>
+        <span class="error-icon">!</span>
+        <span id="error-text"></span>
+        <button id="error-retry" class="tool-btn" title="Ask the last question again" hidden>Try again</button>
+        <button id="error-close" class="icon-btn" title="Dismiss" aria-label="Dismiss">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div id="status-bar" class="status-bar">
+        <span id="status-dot" class="status-dot ok"></span>
+        <span id="status-text">Connecting to agent…</span>
+      </div>
+      <div id="messages"></div>
+      <button id="scroll-bottom" class="scroll-bottom-btn" title="Scroll to bottom" hidden aria-label="Scroll to bottom">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <section id="welcome" class="welcome" hidden>
+        <div class="welcome-card">
+          <div class="welcome-mark">
+            <img src="static/logo-full.png" alt="Data Agent logo">
+          </div>
+          <h1>Data Agent</h1>
+          <p class="welcome-sub">Ask questions about your data. Explore your database using natural language — get SQL, charts and diagrams generated live.</p>
+          <p id="welcome-note" class="welcome-note" hidden></p>
+          <div class="chips">
+            <button class="chip" data-prompt="Top 5 products by revenue — show a bar chart">Top 5 products by revenue — show a bar chart</button>
+            <button class="chip" data-prompt="Trend of monthly revenue over time">Trend of monthly revenue over time</button>
+            <button class="chip" data-prompt="Draw me the ER diagram for this database">Draw me the ER diagram for this database</button>
+            <button class="chip" data-prompt="Create a flowchart showing how orders flow through our system">Create a flowchart showing how orders flow through our system</button>
+          </div>
+        </div>
+      </section>
+      <div id="input-bar">
+        <textarea id="input" placeholder="Ask anything about the database..." rows="1"></textarea>
+        <button id="send-btn" class="send-btn" title="Send (Enter)" aria-label="Send message">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg>
+        </button>
+      </div>
+    </main>
+  </div>
+  <div id="sidebar-fade" hidden></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-3.0.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script src="static/app.js?v=19"></script>
+</body>
+</html>
