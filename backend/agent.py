@@ -28,7 +28,14 @@ from backend.tool_registry import build_tool_declarations, run_tool
 
 load_dotenv()
 
-CLIENT = genai.Client(api_key=GEMINI_API_KEY)
+
+def get_client():
+    if not GEMINI_API_KEY:
+        raise RuntimeError(
+            "GEMINI_API_KEY is not configured. "
+            "Set it in Vercel environment variables."
+        )
+    return genai.Client(api_key=GEMINI_API_KEY)
 
 # ------------------------------------------------------------------
 # System prompt
@@ -198,7 +205,7 @@ def _stream_generate(contents, config):
     """Generate content, automatically waiting out free-tier 429 limits."""
     for attempt in range(3):
         try:
-            for chunk in CLIENT.models.generate_content_stream(
+            for chunk in get_client().models.generate_content_stream(
                 model=GEMINI_MODEL,
                 contents=contents,
                 config=config,
