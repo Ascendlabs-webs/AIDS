@@ -1,4 +1,4 @@
-﻿"""
+"""
 Streaming LLM agent.
 
 Runs the Gemini model with the five database tools using the
@@ -205,7 +205,8 @@ def _stream_generate(contents, config):
     """Generate content, automatically waiting out free-tier 429 limits."""
     for attempt in range(3):
         try:
-            for chunk in get_client().models.generate_content_stream(
+            client = get_client()
+            for chunk in client.models.generate_content_stream(
                 model=GEMINI_MODEL,
                 contents=contents,
                 config=config,
